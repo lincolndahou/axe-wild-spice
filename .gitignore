@@ -1,0 +1,12 @@
+# Sources de travail : rushes, planches, pistes abandonnées.
+# Lourdes et internes, elles n'ont rien à faire dans le dépôt publié.
+brief/
+
+# Vidéo source. Le film du site est rejoué depuis frames/, pas depuis ce
+# fichier : 10 Mo inutiles en ligne.
+assets/video/
+
+# Systèmes
+Thumbs.db
+desktop.ini
+.DS_Store

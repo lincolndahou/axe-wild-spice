@@ -1,0 +1,647 @@
+/* =========================================================
+   AXE — WILD SPICE
+   Structure : hero → film épinglé (séquence d'images) →
+   sections en flux normal une fois l'épinglage libéré.
+   Direction artistique : Cinematic Luxury Tech (réf. ARQ-01)
+   ========================================================= */
+
+/* ---------- 1. TOKENS ---------- */
+:root{
+  --bg:          #080B0E;
+  --bg-raised:   #0C1116;   /* alternance de section, sans quitter le noir */
+  --surface:     #171D23;
+  --text:        #F5F7FA;
+  --text-2:      #B8C1C9;
+  --accent:      #58BCE8;
+  --accent-2:    #718A9D;
+  --product:     #F7931A;   /* orange AXE, réservé au bouton d'achat */
+
+  --line:        rgba(245,247,250,.14);
+  --line-strong: rgba(245,247,250,.28);
+
+  /* Grotesque serrée, comme la référence. Helvetica Neue si la machine
+     l'a (macOS), sinon Inter chargé en webfont : même squelette. */
+  --font-display: "Helvetica Neue", "HelveticaNeue", "Inter",
+                  Helvetica, Arial, sans-serif;
+  --font-mono:    "IBM Plex Mono", "Space Mono", ui-monospace, monospace;
+
+  --gutter: clamp(20px, 4.5vw, 72px);
+  --section-y: clamp(88px, 13vh, 180px);
+  --radius: 10px;
+  /* Mesure maximale du contenu. Doit rester au-dessus des écrans courants
+     (1920 px) : en dessous, le contenu se fige en colonne étroite pendant
+     que la barre de navigation, elle, reste pleine largeur. */
+  --wrap: 120rem;
+
+  --ease: cubic-bezier(.22, 1, .36, 1);
+  --dur-fast: 420ms;
+}
+
+/* ---------- 2. BASE ---------- */
+*,*::before,*::after{ box-sizing:border-box; }
+html{ background:var(--bg); -webkit-text-size-adjust:100%; }
+html.lenis, html.lenis body{ height:auto; }
+.lenis.lenis-smooth{ scroll-behavior:auto !important; }
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-display);
+  font-weight:300;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  overflow-x:hidden;
+}
+
+img,canvas{ display:block; max-width:100%; }
+h1,h2,h3,p,ol,ul{ margin:0; }
+ol,ul{ padding:0; list-style:none; }
+a{ color:inherit; text-decoration:none; }
+button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; }
+
+::selection{ background:var(--accent); color:var(--bg); }
+:focus-visible{ outline:1px solid var(--accent); outline-offset:4px; }
+.nowrap{ white-space:nowrap; }
+.wrap{ margin-inline:auto; max-width:var(--wrap); }
+
+/* Libellés techniques : mono, majuscules, approche large */
+.label,
+.meta__item,
+.nav__links a,
+.nav__product,
+.btn span,
+.facts li,
+.chapter__cta,
+.qualities__num,
+.feature__caption .label,
+.foot__bar{
+  font-family:var(--font-mono);
+  font-weight:400;
+  font-size:.6875rem;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+}
+.label{ color:var(--accent-2); }
+
+/* ---------- 3. TYPOGRAPHIE ---------- */
+.display{
+  font-weight:300;
+  font-size:clamp(2.75rem, 9vw, 8.75rem);
+  line-height:.88;
+  letter-spacing:-.042em;
+}
+.display .word{ display:block; overflow:hidden; }
+.display .word > span{ display:block; }
+
+.title{
+  font-weight:300;
+  font-size:clamp(2.125rem, 5.4vw, 4.75rem);
+  line-height:.94;
+  letter-spacing:-.038em;
+}
+
+.lede{
+  max-width:34ch;
+  color:var(--text-2);
+  font-size:clamp(.95rem, 1.15vw, 1.0625rem);
+  line-height:1.65;
+}
+
+/* ---------- 4. NAVIGATION ---------- */
+.nav{
+  position:fixed; top:0; left:0; right:0; z-index:60;
+  display:flex; align-items:center; justify-content:space-between; gap:24px;
+  padding:22px var(--gutter);
+  border-bottom:1px solid transparent;
+  transition:background var(--dur-fast) var(--ease),
+             border-color var(--dur-fast) var(--ease),
+             padding var(--dur-fast) var(--ease);
+}
+.nav.is-stuck{
+  background:rgba(8,11,14,.66);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  border-bottom-color:var(--line);
+  padding-top:14px; padding-bottom:14px;
+}
+.nav__brand{ display:flex; align-items:center; gap:12px; }
+/* Logotype en SVG : hauteur calée sur la capitale du texte voisin,
+   largeur déduite du rapport du tracé. `currentColor` le fait suivre
+   la couleur de la barre, y compris au survol. */
+.nav__mark{
+  display:block;
+  height:15px; width:auto;
+  fill:currentColor;
+}
+.nav__rule{ width:1px; height:14px; background:var(--line-strong); }
+.nav__product{ color:var(--text-2); }
+
+.nav__links{ display:flex; gap:clamp(18px, 2.6vw, 44px); }
+.nav__links a{ color:var(--text-2); transition:color var(--dur-fast) var(--ease); }
+.nav__links a:hover, .nav__links a.is-active{ color:var(--text); }
+
+.nav__burger{ display:none; width:34px; height:34px; flex-direction:column; justify-content:center; gap:6px; }
+.nav__burger span{ display:block; height:1px; width:100%; background:var(--text);
+  transition:transform var(--dur-fast) var(--ease); }
+.nav.is-open .nav__burger span:first-child{ transform:translateY(3.5px) rotate(45deg); }
+.nav.is-open .nav__burger span:last-child{ transform:translateY(-3.5px) rotate(-45deg); }
+
+/* ---------- 5. BOUTONS ---------- */
+.btn{
+  display:inline-flex; align-items:center; gap:14px;
+  padding:14px 26px;
+  border:1px solid var(--line-strong);
+  border-radius:999px;
+  background:rgba(23,29,35,.35);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  color:var(--text);
+  transition:border-color var(--dur-fast) var(--ease),
+             background var(--dur-fast) var(--ease),
+             filter var(--dur-fast) var(--ease);
+}
+.btn--sm{ padding:10px 20px; }
+.btn:hover{ border-color:var(--accent); background:rgba(88,188,232,.10); filter:brightness(1.12); }
+.btn--accent:hover{ border-color:var(--product); background:rgba(247,147,26,.10); }
+.btn__arrow{
+  width:10px; height:10px;
+  border-top:1px solid currentColor; border-right:1px solid currentColor;
+  transform:rotate(45deg) translate(-1px,1px);
+  transition:transform var(--dur-fast) var(--ease);
+}
+.btn:hover .btn__arrow{ transform:rotate(45deg) translate(2px,-2px); }
+
+/* ---------- 6. HERO ---------- */
+.hero{
+  position:relative;
+  min-height:100svh;
+  display:grid; grid-template-rows:auto 1fr auto;
+  padding:clamp(88px, 11vh, 120px) var(--gutter) clamp(28px, 5vh, 44px);
+  background:var(--bg);
+  overflow:hidden;
+}
+/* Le texte passe au-dessus du visuel */
+.hero > *:not(.hero__media){ position:relative; z-index:1; }
+
+.hero__media{ position:absolute; inset:0; z-index:0; overflow:hidden; }
+
+/* Scène 16/9 dimensionnée en « cover » à la main : le décor, la bombe en
+   rotation et la zone sensible partagent la même boîte, donc les mêmes
+   coordonnées en pourcentage. Calage exact, sans recalcul en JS.
+   Ancrage à 72 % : le produit survit au recadrage sur écran étroit. */
+.hero__stage{
+  position:absolute;
+  top:50%; left:72%;
+  transform:translate(-72%, -50%);
+  width:max(100%, 177.7778svh);
+  height:max(100%, 56.25vw);
+  animation:heroZoom 16s var(--ease) forwards;
+}
+@keyframes heroZoom{
+  from{ scale:1.06; }
+  to  { scale:1; }
+}
+
+.hero__plate{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+}
+.hero__media.is-empty .hero__plate{ display:none; }
+
+/* Assombrissement à gauche : le texte reste lisible, le produit garde sa lumière */
+/* Le visuel apporte déjà sa zone noire à gauche : le voile reste léger,
+   sinon il éteint les volutes orange. */
+.hero__veil{
+  position:absolute; inset:0;
+  background:
+    linear-gradient(to right, rgba(8,11,14,.70) 0%, rgba(8,11,14,.46) 28%,
+                              rgba(8,11,14,.10) 54%, rgba(8,11,14,0) 74%,
+                              rgba(8,11,14,.30) 100%),
+    linear-gradient(180deg, rgba(8,11,14,.68) 0%, rgba(8,11,14,0) 22%,
+                            rgba(8,11,14,0) 70%, rgba(8,11,14,.82) 100%);
+}
+.meta{ display:flex; justify-content:space-between; gap:16px; }
+.meta__item{ color:var(--accent-2); }
+.meta__item em{ font-style:normal; color:var(--text); }
+.meta__item--center{ text-align:center; }
+.meta__item--right{ text-align:right; }
+
+.hero__inner{
+  align-self:end;
+  display:flex; flex-direction:column; align-items:flex-start;
+  gap:clamp(18px, 2.6vh, 32px);
+  max-width:min(100%, 62vw);
+}
+.scroll-cue{ display:inline-flex; align-items:center; gap:14px; color:var(--accent-2);
+  font-family:var(--font-mono); font-size:.6875rem; letter-spacing:.22em; text-transform:uppercase; }
+.scroll-cue__line{
+  display:block; width:clamp(48px, 7vw, 110px); height:1px;
+  background:linear-gradient(90deg, var(--line) 0%, var(--text) 100%);
+  transform-origin:left center;
+  animation:cue 2.6s var(--ease) infinite;
+}
+@keyframes cue{
+  0%,100%{ transform:scaleX(.45); opacity:.5; }
+  50%    { transform:scaleX(1);   opacity:1;  }
+}
+
+/* ---------- 7. FILM ÉPINGLÉ ---------- */
+.film{
+  position:relative;
+  height:100svh; width:100%;
+  overflow:hidden;
+  background:var(--bg);
+}
+#canvas{ position:absolute; inset:0; width:100%; height:100%; }
+
+/* Lisibilité du texte : assombrissement des deux bords, en dégradé continu
+   depuis le bord de l'écran. Le produit reste au centre, en pleine lumière.
+   Pas de bloc posé par-dessus : aucune arête visible. */
+.film__vignette{
+  position:absolute; inset:0; pointer-events:none;
+  background:
+    linear-gradient(to right, rgba(8,11,14,.86) 0%, rgba(8,11,14,.45) 22%, rgba(8,11,14,0) 44%),
+    linear-gradient(to left,  rgba(8,11,14,.86) 0%, rgba(8,11,14,.45) 22%, rgba(8,11,14,0) 44%),
+    linear-gradient(180deg, rgba(8,11,14,.70) 0%, rgba(8,11,14,0) 20%,
+                            rgba(8,11,14,0) 72%, rgba(8,11,14,.88) 100%),
+    radial-gradient(125% 88% at 50% 50%, rgba(8,11,14,0) 40%, rgba(8,11,14,.62) 100%);
+}
+
+/* Chapitres posés sur la zone libre de l'image */
+.chapter{
+  position:absolute; top:50%; z-index:10;
+  transform:translateY(-50%);
+  max-width:min(38rem, 42vw);
+  pointer-events:none;
+}
+.chapter--left{ left:var(--gutter); }
+.chapter--right{ right:var(--gutter); text-align:right; }
+
+.chapter .head, .chapter .body{ opacity:0; visibility:hidden; }
+
+.chapter__kicker{
+  display:flex; align-items:baseline; gap:16px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--line-strong);
+}
+.chapter--right .chapter__kicker{ flex-direction:row-reverse; }
+.chapter__num{
+  font-family:var(--font-mono);
+  font-size:1.5rem; font-weight:300;
+  letter-spacing:0;
+  color:var(--accent);
+}
+.chapter__title{
+  margin-top:20px;
+  font-weight:300;
+  font-size:clamp(2.25rem, 5.2vw, 4.5rem);
+  line-height:.92;
+  letter-spacing:-.04em;
+}
+.chapter__hook{
+  margin-top:16px;
+  font-size:clamp(1.0625rem, 1.5vw, 1.375rem);
+  color:var(--text);
+  font-weight:300;
+}
+.chapter__text{
+  margin-top:18px;
+  max-width:38ch;
+  color:var(--text-2);
+  line-height:1.75;
+}
+.chapter--right .chapter__text{ margin-left:auto; }
+
+.facts{ display:flex; flex-wrap:wrap; gap:6px 22px; margin-top:20px; }
+.chapter--right .facts{ justify-content:flex-end; }
+.facts li{ color:var(--accent); }
+
+.chapter__cta{
+  display:inline-flex; margin-top:26px;
+  padding-bottom:6px;
+  border-bottom:1px solid var(--line-strong);
+  pointer-events:auto;
+  transition:border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+.chapter__cta:hover{ border-color:var(--product); color:var(--product); }
+
+.film__progress{
+  position:absolute; inset-inline:0; bottom:0; z-index:20;
+  height:2px; background:rgba(245,247,250,.10);
+}
+.film__fill{ height:100%; width:100%; transform:scaleX(0); transform-origin:left center; background:var(--text); }
+
+/* ---------- 8. SECTIONS APRÈS LE FILM ---------- */
+.section{
+  position:relative; z-index:1;
+  padding:var(--section-y) var(--gutter);
+  background:var(--bg);
+  border-top:1px solid var(--line);
+}
+.section--raised{ background:var(--bg-raised); }
+.section--flush{ padding-inline:0; }
+
+.entete{
+  display:grid; gap:clamp(24px, 4vw, 64px);
+  align-items:end;
+}
+@media (min-width: 900px){
+  .entete{ grid-template-columns:minmax(0,7fr) minmax(0,4fr); }
+}
+.entete__rule{
+  display:flex; align-items:baseline; gap:18px;
+  padding-bottom:12px;
+  border-bottom:1px solid var(--line);
+}
+.entete__num{
+  font-family:var(--font-mono);
+  font-size:1.5rem; font-weight:300; color:var(--accent);
+}
+.entete__main .title{ margin-top:26px; }
+.entete__intro{
+  color:var(--text-2);
+  line-height:1.75;
+  display:flex; flex-direction:column; align-items:flex-start; gap:28px;
+}
+
+/* --- Titre en mots qui montent -----------------------------------------
+   Chaque mot est masqué par son propre bloc en overflow:hidden et remonte
+   de 110 %, décalé de 60 ms par mot. */
+.words .word{
+  display:inline-block;
+  overflow:hidden;
+  vertical-align:top;
+  padding-bottom:.14em; margin-bottom:-.14em;
+}
+.words .word > span{
+  display:inline-block;
+  transform:translateY(110%);
+  transition:transform 1s var(--ease);
+  transition-delay:calc(var(--i, 0) * 60ms);
+}
+.words.is-in .word > span{ transform:none; }
+
+/* --- Filet qui se trace au défilement ---------------------------------
+   `--draw` est écrit en continu pendant que la section traverse l'écran.
+   Nom distinct de `--line`, qui est déjà la couleur des filets. */
+.steps__line{
+  height:1px;
+  margin:clamp(34px, 5vh, 52px) 0 clamp(18px, 3vh, 30px);
+  background:var(--line);
+}
+.steps__line span{
+  display:block; height:100%;
+  background:var(--text);
+  transform:scaleX(var(--draw, 0));
+  transform-origin:left center;
+}
+.steps__intro{
+  margin-top:clamp(20px, 3vh, 30px);
+  max-width:46ch;
+  color:var(--text-2);
+  line-height:1.75;
+}
+.section--steps .qualities{ margin-top:0; }
+
+/* Qualités — trois colonnes sur une seule ligne, numéro au-dessus */
+.qualities{
+  margin-top:clamp(48px, 8vh, 96px);
+  display:grid;
+  gap:clamp(28px, 4vw, 56px);
+}
+@media (min-width: 820px){
+  .qualities{ grid-template-columns:repeat(3, minmax(0,1fr)); }
+}
+.qualities li{
+  padding-top:clamp(20px, 3vh, 30px);
+  border-top:1px solid var(--line);
+}
+.qualities__num{
+  display:block;
+  margin-bottom:16px;
+  color:var(--accent-2);
+}
+.qualities h3{
+  font-size:clamp(1.375rem, 2vw, 1.875rem);
+  font-weight:300; line-height:1.08; letter-spacing:-.035em;
+}
+.qualities p{ margin-top:12px; max-width:32ch; color:var(--text-2); font-size:.9375rem; line-height:1.7; }
+
+/* III — Le flacon */
+.feature{ position:relative; margin:0; }
+.feature img{
+  width:100%; height:clamp(60svh, 70vh, 86svh);
+  object-fit:cover;
+}
+.feature__caption{
+  position:absolute; inset:auto 0 0 0;
+  padding:clamp(32px,6vh,72px) var(--gutter);
+  background:linear-gradient(to top, rgba(8,11,14,.94) 12%, rgba(8,11,14,.45) 62%, transparent);
+}
+.feature__caption .title{ margin-top:18px; }
+.feature__caption p{ margin-top:20px; max-width:46ch; color:var(--text-2); line-height:1.75; }
+
+/* Bandeau défilant */
+.band{
+  overflow:hidden; white-space:nowrap;
+  padding:clamp(28px,5vh,56px) 0;
+  background:var(--bg);
+  border-block:1px solid var(--line);
+}
+.band__text{
+  display:inline-block;
+  font-size:clamp(3rem, 12vw, 11rem);
+  font-weight:300; line-height:1; letter-spacing:-.04em;
+  color:transparent;
+  -webkit-text-stroke:1px rgba(245,247,250,.16);
+}
+
+/* La gamme — grille magazine asymétrique */
+.gallery{
+  margin-top:clamp(48px, 8vh, 96px);
+  display:grid; gap:clamp(10px, 1.2vw, 18px);
+  grid-template-columns:repeat(2, minmax(0,1fr));
+  grid-auto-rows:14rem;
+}
+@media (min-width: 900px){
+  /* Trois rangées sur 12 colonnes :
+     g1 (7) + g2 (5) | g1 continue + g3 (5) | g4 (6) + g5 (6) */
+  .gallery{ grid-template-columns:repeat(12, minmax(0,1fr)); grid-auto-rows:17rem; }
+  .g1{ grid-column:span 7; grid-row:span 2; }
+  .g2{ grid-column:span 5; }
+  .g3{ grid-column:span 5; }
+  .g4{ grid-column:span 6; }
+  .g5{ grid-column:span 6; }
+}
+.gallery figure{
+  position:relative; margin:0; overflow:hidden;
+  border:1px solid var(--line); border-radius:var(--radius);
+  background:var(--surface);
+}
+.gallery img{
+  width:100%; height:100%; object-fit:cover;
+  transition:transform 1200ms var(--ease);
+}
+.gallery figure:hover img{ transform:scale(1.04); }
+.gallery figcaption{
+  position:absolute; left:14px; bottom:12px;
+  color:var(--text-2);
+  mix-blend-mode:difference;
+}
+
+/* Emplacement vide : le visuel n'existe pas encore */
+.gallery figure.is-empty{
+  background:
+    repeating-linear-gradient(135deg,
+      rgba(245,247,250,.025) 0 10px, transparent 10px 20px),
+    var(--surface);
+}
+.gallery figure.is-empty img{ display:none; }
+.gallery figure.is-empty::after{
+  content:"VISUEL À VENIR";
+  position:absolute; inset:0;
+  display:grid; place-items:center;
+  font-family:var(--font-mono); font-size:.625rem;
+  letter-spacing:.24em; color:var(--accent-2); opacity:.55;
+}
+
+/* V — Questions */
+.faq{ margin-top:clamp(48px, 8vh, 96px); border-top:1px solid var(--line); }
+.faq details{ border-bottom:1px solid var(--line); }
+.faq summary{
+  display:flex; align-items:center; justify-content:space-between; gap:24px;
+  padding:26px 0; cursor:pointer; list-style:none;
+  font-size:clamp(1.125rem, 1.8vw, 1.5rem); font-weight:300; letter-spacing:-.02em;
+}
+.faq summary::-webkit-details-marker{ display:none; }
+.faq summary span{
+  font-size:1.5rem; color:var(--accent);
+  transition:transform 300ms var(--ease);
+}
+.faq details[open] summary span{ transform:rotate(45deg); }
+.faq p{ padding-bottom:26px; max-width:60ch; color:var(--text-2); line-height:1.75; }
+
+/* VI — Acheter */
+.section--cta{ background:var(--bg); }
+
+/* ---------- 9. FOOTER ---------- */
+.foot{
+  padding:clamp(56px,8vh,96px) var(--gutter) 40px;
+  background:var(--bg-raised);
+  border-top:1px solid var(--line);
+}
+.foot__wordmark{
+  font-size:clamp(3rem, 10vw, 10rem);
+  font-weight:300; line-height:.88; letter-spacing:-.045em;
+  color:rgba(245,247,250,.92);
+}
+.foot__wordmark em{ font-style:normal; color:var(--accent-2); }
+.foot__notice{
+  margin-top:20px;
+  max-width:74ch;
+  font-size:.75rem;
+  line-height:1.7;
+  color:var(--accent-2);
+  opacity:.72;
+}
+.foot__bar{
+  margin-top:clamp(32px,5vh,56px);
+  padding-top:22px;
+  border-top:1px solid var(--line);
+  display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  color:var(--accent-2);
+}
+
+/* ---------- 10. RESPONSIVE ---------- */
+@media (min-width: 1100px){
+  .chapter--left{ left:clamp(var(--gutter), 13vw, 14rem); }
+  .chapter--right{ right:clamp(var(--gutter), 13vw, 14rem); }
+}
+
+@media (max-width: 768px){
+  .nav__cta{ display:none; }
+  .nav__burger{ display:flex; }
+  .nav__links{
+    position:fixed; inset:0;
+    flex-direction:column; justify-content:center; align-items:center; gap:28px;
+    background:rgba(8,11,14,.96);
+    backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+    opacity:0; visibility:hidden;
+    transition:opacity var(--dur-fast) var(--ease), visibility var(--dur-fast);
+  }
+  .nav__links a{ font-size:.875rem; }
+  .nav.is-open .nav__links{ opacity:1; visibility:visible; }
+
+  .hero__inner{ max-width:100%; }
+
+  /* Écran étroit : le produit remonte, le texte s'appuie sur le bas */
+  .hero__media img{ object-position:64% 32%; }
+  .hero__veil{
+    background:linear-gradient(180deg, rgba(8,11,14,.72) 0%, rgba(8,11,14,.15) 26%,
+                                       rgba(8,11,14,.70) 62%, rgba(8,11,14,.95) 100%);
+  }
+
+  /* Film : le texte passe en bas, sur un dégradé plein écran */
+  .chapter,
+  .chapter--left,
+  .chapter--right{
+    top:auto; bottom:64px; left:var(--gutter); right:var(--gutter);
+    max-width:none; transform:none; text-align:left;
+  }
+  .chapter--right .chapter__kicker{ flex-direction:row; }
+  .chapter--right .chapter__text{ margin-left:0; }
+  .chapter--right .facts{ justify-content:flex-start; }
+  .chapter__text{ display:none; }
+
+  /* Le texte passe en bas : l'assombrissement suit */
+  .film__vignette{
+    background:
+      linear-gradient(180deg, rgba(8,11,14,.70) 0%, rgba(8,11,14,0) 18%,
+                              rgba(8,11,14,0) 40%, rgba(8,11,14,.94) 88%);
+  }
+
+  .gallery{ grid-auto-rows:11rem; }
+  .g1{ grid-column:span 2; }
+}
+
+/* ---------- 11. RÉVÉLATIONS ---------- */
+/* Posé par le JS. Sans JS, tout reste visible. */
+
+/* ---------- 12. ACCESSIBILITÉ MOUVEMENT ---------- */
+/* Le film devient une suite d'images fixes, une par chapitre :
+   même contenu, aucun mouvement, aucun épinglage. */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+  }
+  .film{ height:auto; overflow:visible; }
+  .film__still{
+    width:100%; height:clamp(52svh, 64vh, 76svh);
+    object-fit:cover;
+    border-top:1px solid var(--line);
+  }
+  .film__vignette,
+  .film__progress{ display:none; }
+  .hero__stage{ animation:none; scale:1; }
+  .words .word > span{ transform:none; }
+  .steps__line span{ transform:none; }
+
+  .chapter,
+  .chapter--left,
+  .chapter--right{
+    position:static;
+    transform:none;
+    max-width:none;
+    text-align:left;
+    padding:clamp(32px,6vh,64px) var(--gutter) clamp(48px,8vh,88px);
+    pointer-events:auto;
+  }
+  .chapter--right .chapter__kicker{ flex-direction:row; }
+  .chapter--right .chapter__text{ margin-left:0; }
+  .chapter--right .facts{ justify-content:flex-start; }
+  .chapter .head, .chapter .body{ opacity:1; visibility:visible; }
+}

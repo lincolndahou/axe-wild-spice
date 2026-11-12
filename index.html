@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AXE Wild Spice — 48 h Non Stop Fresh</title>
+<meta name="description" content="AXE Wild Spice. Ça ne masque pas, ça stoppe. 48 heures Non Stop Fresh. Spray corporel 150 ml, Wild Spices &amp; Cedarwood.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- ============ NAVIGATION ============ -->
+<header class="nav" id="nav">
+  <a class="nav__brand" href="#top">
+    <!-- Logotype redessiné en tracés : A à sommet plat, X à taille pincée,
+         E à barre médiane plus courte. Règle de remplissage « evenodd » :
+         le contre-poinçon et l'entrejambe du A sont des trous. -->
+    <svg class="nav__mark" viewBox="0 0 270 100" role="img" aria-label="AXE">
+      <path fill-rule="evenodd" d="
+        M33,0 L59,0 L92,100 L0,100 Z
+        M46,39 L54,64 L38,64 Z
+        M34,76 L58,76 L66,100 L26,100 Z
+        M102,0 L128,0 L145,32 L162,0 L188,0 L159,50 L188,100 L162,100
+          L145,68 L128,100 L102,100 L131,50 Z
+        M198,0 L270,0 L270,22 L224,22 L224,39 L252,39 L252,61 L224,61
+          L224,78 L270,78 L270,100 L198,100 Z"/>
+    </svg>
+    <span class="nav__rule"></span>
+    <span class="nav__product">WILD&nbsp;SPICE</span>
+  </a>
+
+  <nav class="nav__links" id="navLinks" aria-label="Navigation principale">
+    <a href="#qualites">QUALITÉS</a>
+    <a href="#gamme">LA GAMME</a>
+    <a href="#questions">QUESTIONS</a>
+  </nav>
+
+  <a class="btn btn--sm nav__cta" href="#acheter">
+    <span>ACHETER</span><i class="btn__arrow" aria-hidden="true"></i>
+  </a>
+
+  <button class="nav__burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false">
+    <span></span><span></span>
+  </button>
+</header>
+
+<main>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top">
+    <!-- Visuel de hero : produit calé à droite, zone libre à gauche pour le texte.
+         Tant que assets/img/hero.jpg n'existe pas, le fond reste noir. -->
+    <div class="hero__media" aria-hidden="true">
+      <div class="hero__stage">
+        <img class="hero__plate" src="assets/img/hero.jpg" alt=""
+             onerror="this.closest('.hero__media').classList.add('is-empty')">
+      </div>
+      <div class="hero__veil"></div>
+    </div>
+
+    <div class="meta meta--top">
+      <span class="meta__item">SPRAY CORPOREL&nbsp;/&nbsp;<em>01</em></span>
+      <span class="meta__item meta__item--center">48&nbsp;HRS · NON STOP FRESH</span>
+      <span class="meta__item meta__item--right">WILD&nbsp;SPICE</span>
+    </div>
+
+    <div class="hero__inner">
+      <span class="label">ARRIVÉE&nbsp;/&nbsp;01</span>
+      <h1 class="display">
+        <span class="word">Arrête l’odeur.</span>
+        <span class="word">Pas toi.</span>
+      </h1>
+      <p class="lede">
+        Wild Spices &amp; Cedarwood. Un sillage sec, boisé,
+        tenu <span class="nowrap">48&nbsp;heures.</span>
+      </p>
+    </div>
+
+    <div class="meta meta--bottom">
+      <span class="meta__item">150&nbsp;ML · AÉROSOL</span>
+      <span class="meta__item meta__item--right scroll-cue">DÉFILER POUR LANCER LE FILM<i class="scroll-cue__line"></i></span>
+    </div>
+  </section>
+
+  <!-- ============ FILM ÉPINGLÉ ============
+       Section 100svh maintenue à l'écran pendant toute la séquence.
+       Quand le film se termine, l'épinglage se libère et la page
+       reprend son cours normal avec les sections ci-dessous.
+  ======================================================== -->
+  <section class="film" id="film" aria-label="Film produit AXE Wild Spice">
+    <canvas id="canvas" aria-hidden="true"></canvas>
+    <div class="film__vignette" aria-hidden="true"></div>
+
+    <!-- Chapitre 01 -->
+    <div class="chapter chapter--left" data-chapter="arrivee">
+      <div class="head">
+        <div class="chapter__kicker"><span class="chapter__num">01</span><span class="label">Arrivée</span></div>
+        <h2 class="chapter__title">Wild Spice</h2>
+        <p class="chapter__hook">Ça ne masque pas. Ça stoppe.</p>
+      </div>
+      <div class="body">
+        <p class="chapter__text">
+          La plupart des déodorants posent un parfum par-dessus l’odeur.
+          Wild Spice s’attaque à la cause. Ce qui reste, c’est seulement
+          ce que tu as choisi de porter.
+        </p>
+        <ul class="facts"><li>Spray corporel</li><li>150 ml</li><li>Boisé épicé</li></ul>
+      </div>
+    </div>
+
+    <!-- Chapitre 02 -->
+    <div class="chapter chapter--right" data-chapter="tenue">
+      <div class="head">
+        <div class="chapter__kicker"><span class="chapter__num">02</span><span class="label">Tenue</span></div>
+        <h2 class="chapter__title">48 heures</h2>
+        <p class="chapter__hook">Un geste le matin couvre deux journées pleines.</p>
+      </div>
+      <div class="body">
+        <p class="chapter__text">
+          Non Stop Fresh. Du réveil au surlendemain, sans retouche,
+          sans y penser — c’est la seule mesure qui compte.
+        </p>
+        <ul class="facts"><li>48 h Non Stop Fresh</li><li>Sans retouche</li></ul>
+      </div>
+    </div>
+
+    <!-- Chapitre 03 -->
+    <div class="chapter chapter--left" data-chapter="signature">
+      <div class="head">
+        <div class="chapter__kicker"><span class="chapter__num">03</span><span class="label">Signature</span></div>
+        <h2 class="chapter__title">Wild Spices<br>&amp; Cedarwood</h2>
+        <p class="chapter__hook">Épice sèche à l’ouverture, bois chaud en fond.</p>
+      </div>
+      <div class="body">
+        <p class="chapter__text">
+          Pas de sucre, pas de fleur. Une verticale boisée, nette,
+          reconnaissable à la seconde.
+        </p>
+        <ul class="facts"><li>Boisé épicé</li><li>Sillage net</li></ul>
+      </div>
+    </div>
+
+    <!-- Chapitre 04 -->
+    <div class="chapter chapter--right" data-chapter="geste">
+      <div class="head">
+        <div class="chapter__kicker"><span class="chapter__num">04</span><span class="label">Le geste</span></div>
+        <h2 class="chapter__title">Une pression</h2>
+        <p class="chapter__hook">Diffusion large, rapide, sans contact.</p>
+      </div>
+      <div class="body">
+        <p class="chapter__text">
+          Spray corporel : le produit couvre en un passage, sèche seul,
+          et ne demande rien de plus.
+        </p>
+        <ul class="facts"><li>Un geste</li><li>Tout le corps</li></ul>
+      </div>
+    </div>
+
+    <!-- Chapitre 05 -->
+    <div class="chapter chapter--left" data-chapter="final">
+      <div class="head">
+        <div class="chapter__kicker"><span class="chapter__num">05</span><span class="label">Non Stop Fresh</span></div>
+        <h2 class="chapter__title">Rien<br>à masquer.</h2>
+        <p class="chapter__hook">C’est toute la promesse, en trois mots.</p>
+      </div>
+      <div class="body">
+        <p class="chapter__text">
+          Wild Spice rejoint la collection. Format 150 ml,
+          disponible en rayon et en ligne.
+        </p>
+        <!-- Formulation imprimée sur le flacon : elle reste telle quelle,
+             en petit, là où c'est une mention de marque et pas un titre. -->
+        <ul class="facts"><li>Don’t mask odour. Stop it.</li></ul>
+        <a class="chapter__cta" href="#acheter">ACHETER — 150 ML →</a>
+      </div>
+    </div>
+
+
+    <div class="film__progress"><div class="film__fill" id="filmFill"></div></div>
+  </section>
+
+  <!-- ====================================================
+       APRÈS LE FILM — la page reprend son cours normal
+  ==================================================== -->
+
+  <!-- QUALITÉS — titre en mots qui montent, filet qui se trace au défilement -->
+  <section class="section section--steps" id="qualites">
+    <div class="wrap">
+      <h2 class="title words" data-words>Ce qu’il fait vraiment.</h2>
+      <p class="steps__intro" data-reveal>
+        Trois choses, tenues du matin au surlendemain. Rien de plus,
+        rien d’inventé.
+      </p>
+
+      <div class="steps__line" aria-hidden="true"><span></span></div>
+
+      <ol class="qualities">
+        <li data-reveal>
+          <span class="qualities__num">01</span>
+          <div>
+            <h3>Stoppe l’odeur</h3>
+            <p>Pas de parfum posé par-dessus. La source est traitée, point.</p>
+          </div>
+        </li>
+        <li data-reveal>
+          <span class="qualities__num">02</span>
+          <div>
+            <h3>Tient 48 heures</h3>
+            <p>Non Stop Fresh. Un geste le matin couvre deux journées pleines.</p>
+          </div>
+        </li>
+        <li data-reveal>
+          <span class="qualities__num">03</span>
+          <div>
+            <h3>Un geste, tout le corps</h3>
+            <p>Spray corporel : une diffusion large, rapide, sans contact.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- I — LE FLACON -->
+  <section class="section section--flush" id="flacon">
+    <figure class="feature">
+      <img src="frames/frame_0177.webp" alt="Gros plan du capot et du logo AXE Wild Spice" loading="lazy">
+      <figcaption class="feature__caption">
+        <span class="label">I&nbsp;/&nbsp;Le flacon</span>
+        <h2 class="title" data-reveal>Noir mat,<br>rien de plus</h2>
+        <p data-reveal>
+          Un corps noir mat, un seul geste de couleur, la signature en bloc.
+          Le capot se verrouille : rien ne se déclenche au fond d’un sac.
+        </p>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- Bandeau défilant -->
+  <div class="band" aria-hidden="true">
+    <div class="band__text" id="bandText">
+      48&nbsp;HRS NON STOP FRESH&nbsp;&nbsp;·&nbsp;&nbsp;WILD SPICES &amp; CEDARWOOD&nbsp;&nbsp;·&nbsp;&nbsp;48&nbsp;HRS NON STOP FRESH&nbsp;&nbsp;·&nbsp;&nbsp;WILD SPICES &amp; CEDARWOOD&nbsp;&nbsp;·&nbsp;&nbsp;
+    </div>
+  </div>
+
+  <!-- II — LA GAMME -->
+  <section class="section" id="gamme">
+    <div class="wrap">
+      <header class="entete">
+        <div class="entete__main">
+          <div class="entete__rule">
+            <span class="entete__num">II</span>
+            <span class="label">La gamme</span>
+          </div>
+          <h2 class="title">Découvrez aussi</h2>
+        </div>
+        <p class="entete__intro">
+          Wild Spice est une signature parmi d’autres. Même format,
+          même tenue, un caractère différent.
+        </p>
+      </header>
+
+      <div class="gallery">
+        <figure data-reveal class="g1"><img src="assets/img/gamme-01.jpg" alt="AXE Dark Temptation, spray corporel" loading="lazy" onerror="this.closest('figure').classList.add('is-empty')"><figcaption class="label">Dark Temptation</figcaption></figure>
+        <figure data-reveal class="g2"><img src="assets/img/gamme-02.jpg" alt="AXE Excite, spray corporel" loading="lazy" onerror="this.closest('figure').classList.add('is-empty')"><figcaption class="label">Excite</figcaption></figure>
+        <figure data-reveal class="g3"><img src="assets/img/gamme-03.jpg" alt="AXE Pulse, spray corporel" loading="lazy" onerror="this.closest('figure').classList.add('is-empty')"><figcaption class="label">Pulse</figcaption></figure>
+        <figure data-reveal class="g4"><img src="assets/img/gamme-04.jpg" alt="AXE Epic Fresh, spray corporel" loading="lazy" onerror="this.closest('figure').classList.add('is-empty')"><figcaption class="label">Epic Fresh</figcaption></figure>
+        <figure data-reveal class="g5"><img src="assets/img/gamme-05.jpg" alt="AXE Skateboards &amp; Fresh Roses, édition limitée" loading="lazy" onerror="this.closest('figure').classList.add('is-empty')"><figcaption class="label">Skateboards &amp; Fresh Roses</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- III — QUESTIONS -->
+  <section class="section section--raised" id="questions">
+    <div class="wrap">
+      <header class="entete">
+        <div class="entete__main">
+          <div class="entete__rule">
+            <span class="entete__num">III</span>
+            <span class="label">Questions</span>
+          </div>
+          <h2 class="title">Bon à savoir</h2>
+        </div>
+      </header>
+
+      <div class="faq">
+        <details data-reveal>
+          <summary>Combien de temps tient la protection ?<span aria-hidden="true">+</span></summary>
+          <p>48 heures. C’est la promesse Non Stop Fresh imprimée sur le flacon.</p>
+        </details>
+        <details data-reveal>
+          <summary>C’est un déodorant ou un parfum ?<span aria-hidden="true">+</span></summary>
+          <p>Les deux. Un spray corporel parfumé Wild Spices &amp; Cedarwood qui stoppe l’odeur au lieu de la couvrir.</p>
+        </details>
+        <details data-reveal>
+          <summary>Quel format ?<span aria-hidden="true">+</span></summary>
+          <p>150 ml, en boîte aérosol.</p>
+        </details>
+        <details data-reveal>
+          <summary>Comment l’utiliser ?<span aria-hidden="true">+</span></summary>
+          <p>Secouer, puis vaporiser à distance sur peau propre et sèche. Le capot se verrouille après usage.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- IV — ACHETER -->
+  <section class="section section--cta" id="acheter">
+    <div class="wrap">
+      <header class="entete">
+        <div class="entete__main">
+          <div class="entete__rule">
+            <span class="entete__num">IV</span>
+            <span class="label">Disponibilité</span>
+          </div>
+          <h2 class="title" data-reveal>Premier drop</h2>
+        </div>
+        <div class="entete__intro">
+          <p data-reveal>
+            Wild Spice rejoint la collection. Format 150 ml,
+            disponible en rayon et en ligne.
+          </p>
+          <a class="btn btn--accent" data-reveal href="#acheter">
+            <span>ACHETER — 150 ML</span><i class="btn__arrow" aria-hidden="true"></i>
+          </a>
+        </div>
+      </header>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="foot">
+  <div class="wrap">
+    <p class="foot__wordmark">AXE <em>Wild Spice</em></p>
+    <div class="foot__bar">
+      <span>SPRAY CORPOREL · BOISÉ ÉPICÉ · 150 ML</span>
+      <span>© <span id="year">2026</span></span>
+    </div>
+    <p class="foot__notice">
+      Maquette d’étude, réalisée à des fins de démonstration. Site non
+      officiel, sans affiliation ni partenariat avec AXE ou Unilever.
+      Les marques, logotypes et visuels produit appartiennent à leurs
+      détenteurs respectifs.
+    </p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
